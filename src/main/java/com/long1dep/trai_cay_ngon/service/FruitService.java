@@ -25,6 +25,7 @@ public class FruitService {
         if (!fruitRepo.existsById(id)) {
             throw new RuntimeException("Not found the given id of fruits");
         }
+        obj.setId(id);
         return fruitRepo.save(obj);
     }
     public void deleteById(Long id) {
