@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/api/fruits")
+@RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/fruits")
 public class FruitController {
     private final FruitService fruitService;
 
@@ -26,6 +27,15 @@ public class FruitController {
     @PostMapping("/save")
     public ResponseEntity<Fruits> saveFruit(@RequestBody Fruits fruits) {
         return ResponseEntity.status(HttpStatus.CREATED).body(fruitService.save(fruits));
+    }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Fruits> updateFruit(@PathVariable("id") Long id, @RequestBody Fruits fruits) {
+        return ResponseEntity.ok(fruitService.updateById(id, fruits));
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteFruit(@PathVariable("id") Long id) {
+        fruitService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 
 
