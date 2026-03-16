@@ -20,10 +20,10 @@ public class FruitController {
     public ResponseEntity<List<Fruits>> getAllFruits() {
         return ResponseEntity.ok(fruitService.getAll());
     }
-    @GetMapping
+    @GetMapping("/page")
     public ResponseEntity<Page<Fruits>> getAllFruits(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "2") int size) {
         return ResponseEntity.ok(fruitService.getPage(page, size));
     }
     @GetMapping("/{id}")
