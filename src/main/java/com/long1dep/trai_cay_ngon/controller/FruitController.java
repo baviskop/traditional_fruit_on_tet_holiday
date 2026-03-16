@@ -3,9 +3,9 @@ package com.long1dep.trai_cay_ngon.controller;
 import com.long1dep.trai_cay_ngon.entity.Fruits;
 import com.long1dep.trai_cay_ngon.service.FruitService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +19,12 @@ public class FruitController {
     @GetMapping()
     public ResponseEntity<List<Fruits>> getAllFruits() {
         return ResponseEntity.ok(fruitService.getAll());
+    }
+    @GetMapping
+    public ResponseEntity<Page<Fruits>> getAllFruits(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(fruitService.getPage(page, size));
     }
     @GetMapping("/{id}")
     public ResponseEntity<Fruits> getFruitById(@PathVariable("id") Long id) {
@@ -37,6 +43,4 @@ public class FruitController {
         fruitService.deleteById(id);
         return ResponseEntity.ok().build();
     }
-
-
 }
