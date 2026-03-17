@@ -1,7 +1,8 @@
 package com.long1dep.trai_cay_ngon.controller;
 
 import com.long1dep.trai_cay_ngon.entity.Fruits;
-import com.long1dep.trai_cay_ngon.service.FruitService;
+import com.long1dep.trai_cay_ngon.service.impl.FruitServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,33 +15,43 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/fruits")
 public class FruitController {
-    private final FruitService fruitService;
-
-    @GetMapping()
+    private final FruitServiceImpl fruitService;
+    @GetMapping
     public ResponseEntity<List<Fruits>> getAllFruits() {
-        return ResponseEntity.ok(fruitService.getAll());
+        return ResponseEntity.ok(fruitService.getAllFruits());
     }
+
     @GetMapping("/page")
-    public ResponseEntity<Page<Fruits>> getAllFruits(
+    public ResponseEntity<Page<Fruits>> getPage(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "2") int size) {
         return ResponseEntity.ok(fruitService.getPage(page, size));
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Fruits> getFruitById(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(fruitService.getOne(id));
+    public ResponseEntity<Fruits> getOne(@PathVariable("id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(fruitService.getOne(id));
     }
-    @PostMapping("/save")
-    public ResponseEntity<Fruits> saveFruit(@RequestBody Fruits fruits) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(fruitService.save(fruits));
+
+    @GetMapping("/types")
+    public ResponseEntity<List<String>> getTypes() {
+        return ResponseEntity.ok(fruitService.getTypes());
     }
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Fruits> updateFruit(@PathVariable("id") Long id, @RequestBody Fruits fruits) {
-        return ResponseEntity.ok(fruitService.updateById(id, fruits));
+
+    @PostMapping
+    public ResponseEntity<Fruits> save(@Valid @RequestBody Fruits obj) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(fruitService.save(obj));
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFruit(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         fruitService.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Fruits> updateById(@PathVariable("id") Long id, @Valid @RequestBody Fruits obj) {
+        return ResponseEntity.ok(fruitService.updateById(id, obj));
+    }
+
 }
